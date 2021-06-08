@@ -10,11 +10,21 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+let production = mix.inProduction();
 
 mix.js('resources/js/app.js', 'public/js').vue()
     .sass('resources/sass/app.scss', 'public/css')
-    .webpackConfig(require('./webpack.config'));
+    .webpackConfig(require('./webpack.config'))
+    .sourceMaps(!production, 'source-map')
+    .disableNotifications()
+    .browserSync({
+        proxy: 'pro-laravel-vue',
+        host: 'pro-laravel-vue',
+        notify: false,
+        open: 'external'
+    });
 
-if (mix.inProduction()) {
+if (production) {
     mix.version();
 }
+
